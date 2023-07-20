@@ -20,7 +20,6 @@ public class Student {
     private Long studentId;
     private Long studentNumber;
     private String studentName;
-    private Long password;
 
     @ManyToMany(mappedBy = "students")
     List<Lesson> lessons;
