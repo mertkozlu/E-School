@@ -2,9 +2,11 @@ package com.ESchool.service;
 
 import com.ESchool.dataAccess.StudentRepository;
 import com.ESchool.dto.GetAllStudentDto;
+import com.ESchool.dto.requests.AddStudentRequest;
 import com.ESchool.dto.responses.GetAllStudentResponse;
 import com.ESchool.entities.Student;
 import com.ESchool.exception.BusinessException;
+import com.ESchool.mappers.ModelMapperService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -15,9 +17,11 @@ import java.util.stream.Collectors;
 @Service
 public class StudentService {
     private final StudentRepository studentRepository;
+    private final ModelMapperService modelMapperService;
 
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository, ModelMapperService modelMapperService) {
         this.studentRepository = studentRepository;
+        this.modelMapperService = modelMapperService;
     }
 
     public GetAllStudentResponse getAllStudents() {
@@ -37,12 +41,19 @@ public class StudentService {
         return response;
     }
 
+    public Student addStudent(AddStudentRequest newStudent) {
+        Student student = this.modelMapperService.forRequest().map(newStudent, Student.class);
+
+        return studentRepository.save(student);
+    }
+
     public GetAllStudentDto convertStudentGetAllStudentDto(Student student) {
         GetAllStudentDto getAllStudentDto = new GetAllStudentDto();
         getAllStudentDto.setStudentId(student.getStudentId());
         getAllStudentDto.setStudentName(student.getStudentName());
-        getAllStudentDto.setPassword(student.getPassword());
 
         return getAllStudentDto;
     }
+
+
 }

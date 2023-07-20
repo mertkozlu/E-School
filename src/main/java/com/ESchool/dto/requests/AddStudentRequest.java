@@ -1,10 +1,9 @@
-package com.ESchool.dto;
+package com.ESchool.dto.requests;
 
 import lombok.Data;
 
 @Data
-public class GetAllStudentDto {
-    private Long studentId;
+public class AddStudentRequest {
     private Long studentNumber;
     private String studentName;
 }
