@@ -43,7 +43,7 @@ public class StudentService {
                 .map(this::convertStudentGetAllStudentDto)
                 .collect(Collectors.toList());
         if (CollectionUtils.isEmpty(dtos)) {
-            throw new BusinessException("Empty list");
+            throw new BusinessException("Empty list.");
         }
         response.setGetAllStudentDto(dtos);
         response.setResultCode("1");
@@ -62,14 +62,16 @@ public class StudentService {
     }
 
     public GetStudentByIdDto getStudentById(Long studentId) {
-        Student student = studentRepository.findById(studentId).orElseThrow(() -> new BusinessException("Student can not found"));
+        Student student = studentRepository.findById(studentId).orElseThrow(
+                () -> new BusinessException("Student can not found."));
         GetStudentByIdDto getStudentByIdDto = convertStudentGetStudentByIdDto(student);
 
         return getStudentByIdDto;
     }
 
     public void updateStudent(UpdateStudentRequest updateStudentRequest) {
-        Student student = studentRepository.findById(updateStudentRequest.getStudentId()).orElseThrow(() -> new BusinessException("Student can not found"));
+        Student student = studentRepository.findById(updateStudentRequest.getStudentId()).orElseThrow(
+                () -> new BusinessException("Student can not found."));
         Student studentToUpdate = this.modelMapperService.forRequest().map(updateStudentRequest, Student.class);
 
         this.studentRepository.save(studentToUpdate);
@@ -92,7 +94,7 @@ public class StudentService {
         if (student!=null){
             return student;
         }else{
-            throw new BusinessException("Student not found");
+            throw new BusinessException("Student not found.");
         }
     }
 

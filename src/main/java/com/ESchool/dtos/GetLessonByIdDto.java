@@ -1,9 +1,9 @@
-package com.ESchool.dtos.responses;
+package com.ESchool.dtos;
 
 import lombok.Data;
 
 @Data
-public class GetAllLessonResponse {
+public class GetLessonByIdDto {
     private Long lessonId;
     private String lessonName;
 }
