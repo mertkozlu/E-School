@@ -1,10 +1,16 @@
 package com.ESchool.service;
 
+import com.ESchool.dataAccess.LessonRepository;
+import com.ESchool.dataAccess.StudentLessonRepository;
 import com.ESchool.dataAccess.StudentRepository;
 import com.ESchool.dtos.GetAllStudentDto;
+import com.ESchool.dtos.GetStudentByIdDto;
 import com.ESchool.dtos.requests.AddStudentRequest;
+import com.ESchool.dtos.requests.UpdateStudentRequest;
 import com.ESchool.dtos.responses.GetAllStudentResponse;
+import com.ESchool.entities.Lesson;
 import com.ESchool.entities.Student;
+import com.ESchool.entities.StudentLesson;
 import com.ESchool.exception.BusinessException;
 import com.ESchool.mappers.ModelMapperService;
 import org.springframework.stereotype.Service;
@@ -18,10 +24,15 @@ import java.util.stream.Collectors;
 public class StudentService {
     private final StudentRepository studentRepository;
     private final ModelMapperService modelMapperService;
+    private final LessonRepository lessonRepository;
+    private final StudentLessonRepository studentLessonRepository;
 
-    public StudentService(StudentRepository studentRepository, ModelMapperService modelMapperService) {
+    public StudentService(StudentRepository studentRepository, ModelMapperService modelMapperService,
+                          LessonRepository lessonRepository, StudentLessonRepository studentLessonRepository) {
         this.studentRepository = studentRepository;
         this.modelMapperService = modelMapperService;
+        this.lessonRepository = lessonRepository;
+        this.studentLessonRepository = studentLessonRepository;
     }
 
     public GetAllStudentResponse getAllStudents() {
@@ -45,9 +56,47 @@ public class StudentService {
 //        Student student = new Student();
 //        student.setStudentNumber(newStudent.getStudentNumber());
 //        student.setStudentName(newStudent.getStudentName());
-
         Student student = modelMapperService.forRequest().map(newStudent, Student.class);
 
+        return studentRepository.save(student);
+    }
+
+    public GetStudentByIdDto getStudentById(Long studentId) {
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new BusinessException("Student can not found"));
+        GetStudentByIdDto getStudentByIdDto = convertStudentGetStudentByIdDto(student);
+
+        return getStudentByIdDto;
+    }
+
+    public void updateStudent(UpdateStudentRequest updateStudentRequest) {
+        Student student = studentRepository.findById(updateStudentRequest.getStudentId()).orElseThrow(() -> new BusinessException("Student can not found"));
+        Student studentToUpdate = this.modelMapperService.forRequest().map(updateStudentRequest, Student.class);
+
+        this.studentRepository.save(studentToUpdate);
+    }
+
+    public void deleteStudentById(Long studentId) {
+        Integer studentCount = studentRepository.countStudent();
+        if (studentCount <= 1) {
+            throw new BusinessException("Student can not be deleted there most be add one student.");
+        }
+        StudentLesson studentLesson = studentLessonRepository.findByStudent_StudentId(studentId);
+        if (Objects.nonNull(studentLesson)) {
+            throw new BusinessException("Student can not be deleted while the student has studentLessons.");
+        }
+        this.studentRepository.deleteById(studentId);
+    }
+
+    public Student getStudentByStudentName(String studentName) {
+        Student student = studentRepository.findByStudentName(studentName);
+        if (student!=null){
+            return student;
+        }else{
+            throw new BusinessException("Student not found");
+        }
+    }
+
+    public Student save(Student student) {
         return studentRepository.save(student);
     }
 
@@ -58,6 +107,15 @@ public class StudentService {
         getAllStudentDto.setStudentName(student.getStudentName());
 
         return getAllStudentDto;
+    }
+
+    public GetStudentByIdDto convertStudentGetStudentByIdDto(Student student) {
+        GetStudentByIdDto getStudentByIdDto = new GetStudentByIdDto();
+        getStudentByIdDto.setStudentId(student.getStudentId());
+        getStudentByIdDto.setStudentNumber(student.getStudentNumber());
+        getStudentByIdDto.setStudentName(student.getStudentName());
+
+        return getStudentByIdDto;
     }
 
 

@@ -21,8 +21,10 @@ public class Student {
     @Column(name = "student_number", unique = true)
     private Long studentNumber;
     private String studentName;
+    private String password;
 
     @ManyToMany(mappedBy = "students")
     List<Lesson> lessons;
+
 
 }
