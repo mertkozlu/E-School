@@ -1,9 +1,9 @@
 package com.ESchool.service;
 
 import com.ESchool.dataAccess.StudentLessonRepository;
-import com.ESchool.dto.GetAllStudentLessonDto;
-import com.ESchool.dto.requests.AddStudentLessonRequest;
-import com.ESchool.dto.responses.GetAllStudentLessonResponse;
+import com.ESchool.dtos.GetAllStudentLessonDto;
+import com.ESchool.dtos.requests.AddStudentLessonRequest;
+import com.ESchool.dtos.responses.GetAllStudentLessonResponse;
 import com.ESchool.entities.StudentLesson;
 import com.ESchool.exception.BusinessException;
 import com.ESchool.mappers.ModelMapperService;
@@ -48,6 +48,10 @@ public class StudentLessonService {
 
     public GetAllStudentLessonDto convertStudentLessonGetAllStudentLessonDto(StudentLesson studentLesson) {
         GetAllStudentLessonDto getAllStudentLessonDto = new GetAllStudentLessonDto();
+        getAllStudentLessonDto.setStudentId(studentLesson.getStudent().getStudentId());
+        getAllStudentLessonDto.setStudentName(studentLesson.getStudent().getStudentName());
+        getAllStudentLessonDto.setLessonId(studentLesson.getLesson().getLessonId());
+        getAllStudentLessonDto.setLessonName(studentLesson.getLesson().getLessonName());
         getAllStudentLessonDto.setStudentLessonId(studentLesson.getStudentLessonId());
         getAllStudentLessonDto.setPointOne(studentLesson.getPointOne());
         getAllStudentLessonDto.setPointTwo(studentLesson.getPointTwo());

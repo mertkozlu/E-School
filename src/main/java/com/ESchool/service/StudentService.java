@@ -1,9 +1,9 @@
 package com.ESchool.service;
 
 import com.ESchool.dataAccess.StudentRepository;
-import com.ESchool.dto.GetAllStudentDto;
-import com.ESchool.dto.requests.AddStudentRequest;
-import com.ESchool.dto.responses.GetAllStudentResponse;
+import com.ESchool.dtos.GetAllStudentDto;
+import com.ESchool.dtos.requests.AddStudentRequest;
+import com.ESchool.dtos.responses.GetAllStudentResponse;
 import com.ESchool.entities.Student;
 import com.ESchool.exception.BusinessException;
 import com.ESchool.mappers.ModelMapperService;
@@ -42,7 +42,11 @@ public class StudentService {
     }
 
     public Student addStudent(AddStudentRequest newStudent) {
-        Student student = this.modelMapperService.forRequest().map(newStudent, Student.class);
+//        Student student = new Student();
+//        student.setStudentNumber(newStudent.getStudentNumber());
+//        student.setStudentName(newStudent.getStudentName());
+
+        Student student = modelMapperService.forRequest().map(newStudent, Student.class);
 
         return studentRepository.save(student);
     }
@@ -50,10 +54,12 @@ public class StudentService {
     public GetAllStudentDto convertStudentGetAllStudentDto(Student student) {
         GetAllStudentDto getAllStudentDto = new GetAllStudentDto();
         getAllStudentDto.setStudentId(student.getStudentId());
+        getAllStudentDto.setStudentNumber(student.getStudentNumber());
         getAllStudentDto.setStudentName(student.getStudentName());
 
         return getAllStudentDto;
     }
+
 
 
 }

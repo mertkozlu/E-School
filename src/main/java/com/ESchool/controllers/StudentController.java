@@ -1,14 +1,10 @@
 package com.ESchool.controllers;
 
-import com.ESchool.dto.requests.AddStudentRequest;
-import com.ESchool.dto.responses.GetAllStudentResponse;
+import com.ESchool.dtos.requests.AddStudentRequest;
+import com.ESchool.dtos.responses.GetAllStudentResponse;
 import com.ESchool.entities.Student;
 import com.ESchool.service.StudentService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("students")

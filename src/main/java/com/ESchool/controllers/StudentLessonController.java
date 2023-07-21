@@ -1,7 +1,7 @@
 package com.ESchool.controllers;
 
-import com.ESchool.dto.requests.AddStudentLessonRequest;
-import com.ESchool.dto.responses.GetAllStudentLessonResponse;
+import com.ESchool.dtos.requests.AddStudentLessonRequest;
+import com.ESchool.dtos.responses.GetAllStudentLessonResponse;
 import com.ESchool.entities.StudentLesson;
 import com.ESchool.service.StudentLessonService;
 import org.springframework.web.bind.annotation.*;

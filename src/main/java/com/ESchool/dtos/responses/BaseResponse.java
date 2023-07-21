@@ -1,4 +1,4 @@
-package com.ESchool.dto.responses;
+package com.ESchool.dtos.responses;
 
 import lombok.Data;
 

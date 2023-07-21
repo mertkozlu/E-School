@@ -1,4 +1,4 @@
-package com.ESchool.dto.requests;
+package com.ESchool.dtos.requests;
 
 import lombok.Data;
 

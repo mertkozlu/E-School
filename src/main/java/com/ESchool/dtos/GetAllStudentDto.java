@@ -1,4 +1,4 @@
-package com.ESchool.dto;
+package com.ESchool.dtos;
 
 import lombok.Data;
 

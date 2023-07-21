@@ -1,6 +1,6 @@
-package com.ESchool.dto.responses;
+package com.ESchool.dtos.responses;
 
-import com.ESchool.dto.GetAllLessonDto;
+import com.ESchool.dtos.GetAllLessonDto;
 import lombok.Data;
 
 import java.util.List;

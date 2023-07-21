@@ -1,9 +1,9 @@
 package com.ESchool.service;
 
 import com.ESchool.dataAccess.LessonRepository;
-import com.ESchool.dto.GetAllLessonDto;
-import com.ESchool.dto.requests.AddLessonRequest;
-import com.ESchool.dto.responses.GetAllLessonResponse;
+import com.ESchool.dtos.GetAllLessonDto;
+import com.ESchool.dtos.requests.AddLessonRequest;
+import com.ESchool.dtos.responses.GetAllLessonResponse;
 import com.ESchool.entities.Lesson;
 import com.ESchool.exception.BusinessException;
 import com.ESchool.mappers.ModelMapperService;
