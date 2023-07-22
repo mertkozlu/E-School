@@ -23,4 +23,5 @@ public class Lesson {
     @JoinTable(name = "student_lesson", joinColumns = @JoinColumn(name = "lesson_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id"))
     private List<Student> students;
+
 }

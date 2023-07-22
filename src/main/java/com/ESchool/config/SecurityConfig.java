@@ -28,16 +28,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationEntryPoint handler;
     private final StudentRepository studentRepository;
 
+
     public SecurityConfig(StudentDetailsServiceImpl userDetailsService,
                           JwtAuthenticationEntryPoint handler, StudentRepository studentRepository) {
         this.userDetailsService = userDetailsService;
         this.handler = handler;
-        this.studentRepository = studentRepository;
+        this.studentRepository=studentRepository;
+
     }
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
+        return new  JwtAuthenticationFilter();
     }
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
@@ -78,7 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
-    public void configure(HttpSecurity httpSecurity) throws Exception {
+    public void configure(HttpSecurity httpSecurity) throws Exception{
         httpSecurity
                 .cors()
                 .and()

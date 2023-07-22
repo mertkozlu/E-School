@@ -8,7 +8,7 @@ import com.ESchool.dtos.GetStudentByIdDto;
 import com.ESchool.dtos.requests.AddStudentRequest;
 import com.ESchool.dtos.requests.UpdateStudentRequest;
 import com.ESchool.dtos.responses.GetAllStudentResponse;
-import com.ESchool.entities.Lesson;
+import com.ESchool.dtos.responses.GetStudentByIdResponse;
 import com.ESchool.entities.Student;
 import com.ESchool.entities.StudentLesson;
 import com.ESchool.exception.BusinessException;
@@ -16,6 +16,7 @@ import com.ESchool.mappers.ModelMapperService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -61,12 +62,19 @@ public class StudentService {
         return studentRepository.save(student);
     }
 
-    public GetStudentByIdDto getStudentById(Long studentId) {
+    public GetStudentByIdResponse getStudentById(Long studentId) {
+        GetStudentByIdResponse response = new GetStudentByIdResponse();
         Student student = studentRepository.findById(studentId).orElseThrow(
                 () -> new BusinessException("Student can not found."));
-        GetStudentByIdDto getStudentByIdDto = convertStudentGetStudentByIdDto(student);
 
-        return getStudentByIdDto;
+        List<GetStudentByIdDto> dtos = new ArrayList<>();
+        dtos.add(convertStudentGetStudentByIdDto(student));
+
+        response.setGetStudentByIdDto(dtos);
+        response.setResultCode("1");
+        response.setResultDescription("Success");
+
+        return response;
     }
 
     public void updateStudent(UpdateStudentRequest updateStudentRequest) {
@@ -91,10 +99,10 @@ public class StudentService {
 
     public Student getStudentByStudentName(String studentName) {
         Student student = studentRepository.findByStudentName(studentName);
-        if (student!=null){
+        if (student == null) {
             return student;
-        }else{
-            throw new BusinessException("Student not found.");
+        } else {
+            throw new BusinessException("Student already exists.");
         }
     }
 
@@ -119,7 +127,6 @@ public class StudentService {
 
         return getStudentByIdDto;
     }
-
 
 
 }

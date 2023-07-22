@@ -1,14 +1,12 @@
-package com.ESchool.dtos;
+package com.ESchool.dtos.requests;
 
 import lombok.Data;
 
 @Data
-public class GetAllStudentLessonDto {
+public class UpdateStudentLessonRequest {
     private Long studentLessonId;
     private Long studentId;
-    private String studentName;
     private Long lessonId;
-    private String lessonName;
     private Long pointOne;
     private Long pointTwo;
     private double grade;

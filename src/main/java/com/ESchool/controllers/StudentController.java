@@ -1,10 +1,9 @@
 package com.ESchool.controllers;
 
-import com.ESchool.dtos.GetAllStudentDto;
-import com.ESchool.dtos.GetStudentByIdDto;
 import com.ESchool.dtos.requests.AddStudentRequest;
 import com.ESchool.dtos.requests.UpdateStudentRequest;
 import com.ESchool.dtos.responses.GetAllStudentResponse;
+import com.ESchool.dtos.responses.GetStudentByIdResponse;
 import com.ESchool.entities.Student;
 import com.ESchool.service.StudentService;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +28,7 @@ public class StudentController {
     }
 
     @GetMapping("/getById/{studentId}")
-    public GetStudentByIdDto getStudentById(@PathVariable Long studentId) {
+    public GetStudentByIdResponse getStudentById(@PathVariable Long studentId) {
         return studentService.getStudentById(studentId);
     }
 

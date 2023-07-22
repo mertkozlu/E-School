@@ -3,7 +3,7 @@ package com.ESchool.dtos;
 import lombok.Data;
 
 @Data
-public class GetAllStudentLessonDto {
+public class GetStudentLessonByIdDto {
     private Long studentLessonId;
     private Long studentId;
     private String studentName;

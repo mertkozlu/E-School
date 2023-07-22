@@ -1,9 +1,9 @@
 package com.ESchool.controllers;
 
-import com.ESchool.dtos.GetLessonByIdDto;
 import com.ESchool.dtos.requests.AddLessonRequest;
 import com.ESchool.dtos.requests.UpdateLessonRequest;
 import com.ESchool.dtos.responses.GetAllLessonResponse;
+import com.ESchool.dtos.responses.GetLessonByIdResponse;
 import com.ESchool.entities.Lesson;
 import com.ESchool.result.DataResult;
 import com.ESchool.result.Result;
@@ -32,7 +32,7 @@ public class LessonController {
     }
 
     @GetMapping("/getById/{lessonId}")
-    public GetLessonByIdDto getLessonById(@PathVariable Long lessonId) {
+    public GetLessonByIdResponse getLessonById(@PathVariable Long lessonId) {
         return lessonService.getLessonById(lessonId);
     }
 

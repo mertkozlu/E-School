@@ -7,4 +7,5 @@ public class AuthResponse {
     private String message;
     private Long studentId;
     private String accessToken;
+    private String refreshToken;
 }

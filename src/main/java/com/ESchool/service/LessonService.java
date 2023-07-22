@@ -5,6 +5,7 @@ import com.ESchool.dtos.GetLessonByIdDto;
 import com.ESchool.dtos.requests.AddLessonRequest;
 import com.ESchool.dtos.requests.UpdateLessonRequest;
 import com.ESchool.dtos.responses.GetAllLessonResponse;
+import com.ESchool.dtos.responses.GetLessonByIdResponse;
 import com.ESchool.entities.Lesson;
 import com.ESchool.exception.BusinessException;
 import com.ESchool.mappers.ModelMapperService;
@@ -12,6 +13,7 @@ import com.ESchool.result.*;
 import com.ESchool.rules.LessonBusinessRules;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,12 +53,19 @@ public class LessonService {
     }
 
 
-    public GetLessonByIdDto getLessonById(Long lessonId) {
+    public GetLessonByIdResponse getLessonById(Long lessonId) {
+        GetLessonByIdResponse response = new GetLessonByIdResponse();
         Lesson lesson = lessonRepository.findById(lessonId).orElseThrow(
                 () -> new BusinessException("Lesson can not found."));
-        GetLessonByIdDto getLessonByIdDto = convertLessonGetLessonByIdDto(lesson);
 
-        return getLessonByIdDto;
+        List<GetLessonByIdDto> dtos = new ArrayList<>();
+        dtos.add(convertLessonGetLessonByIdDto(lesson));
+
+        response.setGetLessonByIdDto(dtos);
+        response.setResultCode("1");
+        response.setResultDescription("Success");
+
+        return response;
     }
 
     public Lesson updateLesson(UpdateLessonRequest updateLessonRequest) {
@@ -80,5 +89,6 @@ public class LessonService {
 
         return getLessonByIdDto;
     }
+
 
 }

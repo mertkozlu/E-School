@@ -2,10 +2,13 @@ package com.ESchool.controllers;
 
 import com.ESchool.dataAccess.StudentRepository;
 import com.ESchool.dtos.requests.LoginRequest;
+import com.ESchool.dtos.requests.RefreshRequest;
 import com.ESchool.dtos.requests.StudentRequest;
 import com.ESchool.dtos.responses.AuthResponse;
+import com.ESchool.entities.RefreshToken;
 import com.ESchool.entities.Student;
 import com.ESchool.security.JwtTokenProvider;
+import com.ESchool.service.RefreshTokenService;
 import com.ESchool.service.StudentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,20 +25,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    private final AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final StudentService studentService;
     private final StudentRepository studentRepository;
+    private final RefreshTokenService refreshTokenService;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider,
-                          PasswordEncoder passwordEncoder, StudentService studentService,
-                          StudentRepository studentRepository) {
+
+
+    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder, StudentService studentService,
+                          StudentRepository studentRepository, RefreshTokenService refreshTokenService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.passwordEncoder = passwordEncoder;
         this.studentService = studentService;
         this.studentRepository = studentRepository;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @PostMapping("/login")
@@ -66,7 +72,7 @@ public class AuthController {
         student.setStudentNumber(registerRequest.getStudentNumber());
         studentService.save(student);
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(registerRequest.getStudentName(), registerRequest.getPassword());
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(registerRequest.getStudentName(),  registerRequest.getPassword());
         Authentication auth = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(auth);
         String jwtToken = jwtTokenProvider.generateJwtToken(auth);
@@ -77,4 +83,25 @@ public class AuthController {
         return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
     }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponse> refresh(@RequestBody RefreshRequest refreshRequest) {
+        AuthResponse response = new AuthResponse();
+        RefreshToken token = refreshTokenService.getByUser(refreshRequest.getStudentId());
+        if (token.getToken().equals(refreshRequest.getRefreshToken()) &&
+                !refreshTokenService.isRefreshExpired(token)) {
+            Student student = token.getStudent();
+
+            String jwtToken = jwtTokenProvider.generateJwtTokenByStudentName(student.getStudentName());
+
+            response.setMessage("token successfully refreshed.");
+            response.setAccessToken("Bearer " + jwtToken);
+            response.setRefreshToken(refreshTokenService.createRefreshToken(student));
+            response.setStudentId(student.getStudentId());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            response.setMessage("refresh token is not valid.");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+
+    }
 }
